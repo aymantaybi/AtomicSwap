@@ -32,7 +32,7 @@ function Address(props: any) {
     const { selectedAddress } = props;
 
     return (
-        <Button leftIcon={<Image boxSize='22px' src="/metamask.png" />} borderRadius="3xl" bgColor="#171e2b" color="#81E6D9" size='sm' variant='outline' marginRight="10" _hover={{ bgColor: "#81E6D9", color: "#171e2b" }} >
+        <Button leftIcon={<Image boxSize='22px' src="/metamask.png" />} borderRadius="3xl" bgColor="#171e2b" color="#81E6D9" size='sm' variant='outline' marginRight="1px" _hover={{ bgColor: "#81E6D9", color: "#171e2b" }} >
             {selectedAddress.substring(0, 7)}…{selectedAddress.substring(selectedAddress.length - 6)}
         </Button>
     );
@@ -86,7 +86,7 @@ export function Bar() {
                     selectedAddress ?
                         <Address {...{ selectedAddress }} />
                         :
-                        <Button leftIcon={<CircleIcon />} bgColor="#171e2b" color="#81E6D9" size='sm' variant='outline' _hover={{ bgColor: "#171e2b" }} marginRight="10" onClick={connectToMetamask}>
+                        <Button leftIcon={<CircleIcon />} bgColor="#171e2b" color="#81E6D9" size='sm' variant='outline' _hover={{ bgColor: "#171e2b" }} marginRight="1px" onClick={connectToMetamask}>
                             Connect Wallet
                         </Button>
                 }

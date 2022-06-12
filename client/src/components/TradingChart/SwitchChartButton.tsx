@@ -1,25 +1,4 @@
-import {
-    Box,
-    HStack,
-    VStack,
-    Image,
-    NumberInput,
-    NumberInputField,
-    NumberInputStepper,
-    NumberIncrementStepper,
-    NumberDecrementStepper,
-    IconButton,
-    InputGroup,
-    InputLeftAddon,
-    Button,
-    Tab,
-    TabList,
-    TabPanel,
-    TabPanels,
-    Tabs,
-    Center
-} from "@chakra-ui/react"
-import { useEffect } from "react";
+import { Image } from "@chakra-ui/react"
 
 export default function SwitchChartButton(props: any) {
 

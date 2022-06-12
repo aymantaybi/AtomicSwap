@@ -34,6 +34,7 @@ import { getAmountOut } from '@/features/swapInterface/swapInterfaceApi';
 import { selectTradingChart } from '@/features/tradingChart/tradingChartSlice';
 
 import { setAmountIn, setAmountOut, setAmountOutMin, selectSwapInterface } from '@/features/swapInterface/swapInterfaceSlice';
+import SwapSettings from "@/components/SwapInterface/SwapSettings";
 
 
 export function TradingInterface() {
@@ -72,7 +73,7 @@ export function TradingInterface() {
     return (
         <Center borderWidth='1px' borderRadius='lg' padding="1rem" bgColor={bgColor} h="30%" flexDirection={"column"} >
             <Flex width="100%" justifyContent="right" >
-                <IconButton size="sm" aria-label="Settings" icon={<SettingsIcon />} />
+                <SwapSettings />
             </Flex>
             <Tabs variant='soft-rounded' colorScheme='green'>
                 <TabList>
