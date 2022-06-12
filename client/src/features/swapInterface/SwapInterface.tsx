@@ -33,7 +33,14 @@ import { getAmountOut } from '@/features/swapInterface/swapInterfaceApi';
 
 import { selectTradingChart } from '@/features/tradingChart/tradingChartSlice';
 
-import { setAmountIn, setAmountOut, setAmountOutMin, selectSwapInterface } from '@/features/swapInterface/swapInterfaceSlice';
+import {
+    setAmountIn,
+    setAmountOut,
+    setAmountOutMin,
+    selectSwapInterface,
+    setSlippage,
+    setDeadline
+} from '@/features/swapInterface/swapInterfaceSlice';
 import SwapSettings from "@/components/SwapInterface/SwapSettings";
 
 
@@ -70,10 +77,27 @@ export function TradingInterface() {
 
     }, [tradingChartState])
 
+    const handleChangeSlippage = (auto: boolean, tolerance: number) => {
+        dispatch(setSlippage({ auto, value: tolerance }));
+    }
+
+    const handleChangeDeadline = (deadline: number) => {
+        dispatch(setDeadline(deadline));
+    }
+
     return (
         <Center borderWidth='1px' borderRadius='lg' padding="1rem" bgColor={bgColor} h="30%" flexDirection={"column"} >
             <Flex width="100%" justifyContent="right" >
-                <SwapSettings />
+                <SwapSettings
+                
+                    settings={swapInterfaceState.settings}
+
+                    {...{
+                        handleChangeSlippage,
+                        handleChangeDeadline
+                    }}
+
+                />
             </Flex>
             <Tabs variant='soft-rounded' colorScheme='green'>
                 <TabList>

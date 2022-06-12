@@ -14,13 +14,14 @@ function SettingWrapper(props: any) {
     )
 }
 
-function SlippageTolerance() {
+function SlippageTolerance(props: { slippage: any; handleChangeSlippage: any; }) {
+
+    const { slippage, handleChangeSlippage } = props;
 
     const format = (val: number) => `${val} %`;
     const parse = (val: string) => val.replace(/^\%/, '');
 
-    const [toleranceRatio, setToleranceRatio] = useState<number>(0.5);
-    const [auto, setAuto] = useState<boolean>(true);
+    console.log(slippage.auto)
 
     return (
         <SettingWrapper title="Slippage Tolerance" >
@@ -29,17 +30,18 @@ function SlippageTolerance() {
                     minWidth="100px"
                     maxWidth="150px"
                     size='sm'
-                    value={format(toleranceRatio)}
-                    onChange={(value) => setToleranceRatio(Number(parse(value)))}
+                    value={format(slippage.value)}
+                    onChange={(value) => handleChangeSlippage(slippage.auto, Number(parse(value)))}
                     step={0.1}
                 >
-                    <NumberInputField borderRadius="lg" placeholder="0.5 %" disabled={auto} />
+                    <NumberInputField borderRadius="lg" placeholder="0.5 %" disabled={slippage.auto} />
                 </NumberInput>
                 <FormControl display='flex' alignItems='center' >
                     <Switch
                         id='auto'
                         size="sm"
-                        onChange={(event) => { setToleranceRatio(0.5); setAuto(event.target.checked) }}
+                        isChecked={slippage.auto}
+                        onChange={(event) => handleChangeSlippage(event.target.checked, 0.5)}
                     />
                     <FormLabel htmlFor='auto-slippage' mb='0' margin="5px" >
                         Auto
@@ -51,9 +53,9 @@ function SlippageTolerance() {
 
 }
 
-function TransactionDeadline() {
+function TransactionDeadline(props: { deadline: any; handleChangeDeadline: any; }) {
 
-    const [deadline, setDeadline] = useState<number>(30);
+    const { deadline, handleChangeDeadline } = props;
 
     return (
         <SettingWrapper title="Transaction Deadline" >
@@ -63,7 +65,7 @@ function TransactionDeadline() {
                     maxWidth="150px"
                     size='sm'
                     value={deadline}
-                    onChange={(value) => setDeadline(Number(value))}
+                    onChange={(value) => handleChangeDeadline(Number(value))}
                 >
                     <NumberInputField borderRadius="lg" />
                 </NumberInput>
@@ -76,8 +78,11 @@ function TransactionDeadline() {
 
 }
 
-export default function SwapSettings() {
+export default function SwapSettings(props: { settings: any; handleChangeSlippage: any; handleChangeDeadline: any; }) {
 
+    const { settings, handleChangeSlippage, handleChangeDeadline } = props;
+
+    const { slippage, deadline } = settings;
 
     return (
         <Popover placement='left' >
@@ -86,11 +91,11 @@ export default function SwapSettings() {
             </PopoverTrigger>
             <PopoverContent width={"min-content"} >
                 <PopoverCloseButton />
-                <PopoverHeader fontSize={"md"} textAlign="start" >Settings</PopoverHeader>
+                <PopoverHeader fontSize={"md"} textAlign="start" >Swap Settings</PopoverHeader>
                 <PopoverBody paddingBottom="20px" >
                     <VStack spacing={3} align='stretch'>
-                        <SlippageTolerance />
-                        <TransactionDeadline />
+                        <SlippageTolerance {...{ slippage, handleChangeSlippage }} />
+                        <TransactionDeadline   {...{ deadline, handleChangeDeadline }} />
                     </VStack>
                 </PopoverBody>
             </PopoverContent>

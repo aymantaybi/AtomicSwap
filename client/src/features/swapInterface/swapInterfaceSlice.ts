@@ -15,6 +15,11 @@ interface Order {
     }
 }
 
+interface Slippage {
+    auto: boolean,
+    value: number
+}
+
 // Define a type for the slice state
 interface SwapInterfaceState {
     orderType: string,
@@ -28,6 +33,10 @@ interface SwapInterfaceState {
         in: string,
         out: string,
         outMin: string
+    },
+    settings: {
+        slippage: Slippage,
+        deadline: number
     }
 }
 
@@ -44,6 +53,13 @@ const initialState: SwapInterfaceState = {
         in: "0",
         out: "0",
         outMin: "0"
+    },
+    settings: {
+        slippage: {
+            auto: true,
+            value: 0.5
+        },
+        deadline: 30
     }
 }
 
@@ -62,11 +78,17 @@ export const swapInterfaceSlice = createSlice({
         },
         setAmountOutMin: (state, action: PayloadAction<string>) => {
             state.amountOutMin = action.payload;
+        },
+        setSlippage: (state, action: PayloadAction<Slippage>) => {
+            state.settings.slippage = action.payload;
+        },
+        setDeadline: (state, action: PayloadAction<number>) => {
+            state.settings.deadline = action.payload;
         }
     }
 });
 
-export const { setOrderType, setAmountIn, setAmountOut, setAmountOutMin } = swapInterfaceSlice.actions
+export const { setOrderType, setAmountIn, setAmountOut, setAmountOutMin, setSlippage, setDeadline } = swapInterfaceSlice.actions
 
 // Other code such as selectors can use the imported `RootState` type
 export const selectSwapInterface = (state: RootState) => state.swapInterface;
