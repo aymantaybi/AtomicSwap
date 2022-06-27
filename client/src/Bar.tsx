@@ -11,10 +11,12 @@ import {
 } from "@chakra-ui/react";
 import { ColorModeSwitcher } from "./ColorModeSwitcher";
 import { ethers } from "ethers";
-import SwapIcon from "@/icons/swap";
-import BridgeIcon from "@/icons/bridge";
-import AtomIcon from "./icons/atom";
-import WalletIcon from "./icons/wallet";
+import SwapIcon from "@/icons/Swap";
+import BridgeIcon from "@/icons/Bridge";
+import AtomIcon from "./icons/Atom";
+import WalletIcon from "./icons/Wallet";
+import ConnectWallet from "./components/Modal/ConnectWallet";
+import { useState } from "react";
 
 function Address(props: any) {
 
@@ -29,35 +31,47 @@ function Address(props: any) {
 
 export function Bar() {
 
-    const provider = new ethers.providers.Web3Provider(window["ethereum" as any] as any);
+    const [selectedAddress, setSelectedAddress] = useState<string | null>(null);
 
-    const [selectedAddress, setSelectedAddress] = React.useState<string | null>(null);
+    const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
-    const connect = async () => {
+    var connect = () => { };
+    var disconnect = () => { };
 
-        const accounts = await provider.send("eth_requestAccounts", []);
-
-        var network = await provider.getNetwork();
-
-        console.log(network);
-
-        await provider.send("wallet_addEthereumChain", [{
-            chainId: '0x7E4',
-            chainName: 'Ronin Network',
-            nativeCurrency: {
-                name: 'RON',
-                symbol: 'RON',
-                decimals: 18
-            },
-            blockExplorerUrls: ['https://explorer.roninchain.com/'],
-            rpcUrls: ['https://api.roninchain.com/rpc'],
-        }]);
-
-        setSelectedAddress(accounts[0]);
+    const openModal = () => {
+        setIsModalOpen(true);
     }
 
-    const disconnect = () => {
-        setSelectedAddress(null);
+    const closeModal = () => {
+        setIsModalOpen(false);
+    }
+
+    if (typeof window.ethereum !== 'undefined') {
+
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+
+        connect = async () => {
+
+            const accounts = await provider.send("eth_requestAccounts", []);
+
+            await provider.send("wallet_addEthereumChain", [{
+                chainId: '0x7E4',
+                chainName: 'Ronin Network',
+                nativeCurrency: {
+                    name: 'RON',
+                    symbol: 'RON',
+                    decimals: 18
+                },
+                blockExplorerUrls: ['https://explorer.roninchain.com/'],
+                rpcUrls: ['https://api.roninchain.com/rpc'],
+            }]);
+
+            setSelectedAddress(accounts[0]);
+        }
+
+        disconnect = () => {
+            setSelectedAddress(null);
+        }
     }
 
     return (
@@ -71,10 +85,10 @@ export function Bar() {
                     </Heading>
                 </Heading>
                 <HStack spacing='5px' marginLeft="30px" >
-                    <Button size="sm" leftIcon={<SwapIcon boxSize="27px" color="#81E6D9" />} colorScheme='teal' variant='outline'>
+                    <Button size="sm" leftIcon={<SwapIcon boxSize="27px" color={useColorModeValue("#319795", "#81E6D9")} />} colorScheme='teal' variant='outline'>
                         Swap
                     </Button>
-                    <Button size="sm" leftIcon={<BridgeIcon boxSize="27px" color="#81E6D9" />} colorScheme='teal' variant='outline'>
+                    <Button size="sm" leftIcon={<BridgeIcon boxSize="27px" color={useColorModeValue("#319795", "#81E6D9")} />} colorScheme='teal' variant='outline'>
                         Bridge
                     </Button>
                 </HStack>
@@ -84,9 +98,13 @@ export function Bar() {
                     selectedAddress ?
                         <Address {...{ selectedAddress, disconnect }} />
                         :
-                        <Button leftIcon={<WalletIcon color />} color="#171e2b" bgColor="#81E6D9" size='sm' variant='outline' marginRight="1px" onClick={connect}>
-                            Connect Wallet
-                        </Button>
+                        <>
+                            <Button leftIcon={<WalletIcon boxSize="20px" />} colorScheme='teal' color="#171e2b" size='sm' variant='solid' marginRight="1px" onClick={openModal}>
+                                Connect Wallet
+                            </Button>
+                            <ConnectWallet isOpen={isModalOpen} onOpen={() => { }} onClose={closeModal} />
+                        </>
+
                 }
                 <ColorModeSwitcher />
             </HStack>
