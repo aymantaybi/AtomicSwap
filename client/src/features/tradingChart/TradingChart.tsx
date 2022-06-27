@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateReserves, selectTradingChart } from './tradingChartSlice';
 
-import { Box, Center, Image, useColorModeValue, VStack } from "@chakra-ui/react"
+import { Box, Center, Container, Flex, Image, useColorModeValue, VStack } from "@chakra-ui/react"
 
 import Chart from "react-apexcharts";
 
@@ -64,7 +64,7 @@ export function TradingChart() {
                 show: false,
             },
             foreColor: '#373d3f',
-            background: bgColor
+            background: 'rgba(0, 0, 0, 0)'
         },
         xaxis: {
             categories: tradingChartState.reservesUpdates.map(update => formatHour(update.time)),
@@ -106,11 +106,13 @@ export function TradingChart() {
             enabled: false
         },
         grid: {
-            show: false,
+            strokeDashArray: 5,
             padding: {
-                left: 0,
-                right: 0
-            }
+                top: 0,
+                right: 15,
+                bottom: 15,
+                left: 15
+            },
         },
         tooltip: {
             enabled: true,
@@ -170,21 +172,20 @@ export function TradingChart() {
     ]
 
     return (
-        <VStack spacing={2} borderWidth='1px' borderRadius='lg' padding="1rem" bgColor={bgColor} align='stretch' width={"100%"} >
-            <div style={{ width: "100%", display: "flex", flexDirection: "row", justifyContent: "left" }} >
-                <SwitchChartButton
-                    assetInSymbol={assets.assetInSymbol}
-                    assetOutSymbol={assets.assetOutSymbol}
-                    onClick={handleClickSwitchChartButton}
-                />
-            </div>
+        <Flex direction="column" borderWidth='1px' borderRadius='lg' padding="1rem" bgColor={bgColor} w="100%" h="100%" >
+            <SwitchChartButton
+                assetInSymbol={assets.assetInSymbol}
+                assetOutSymbol={assets.assetOutSymbol}
+                onClick={handleClickSwitchChartButton}
+            />
             <Chart
                 options={options}
                 series={series}
                 type="area"
-                width="100%"
-                height="300px"
+                height={"100%"}
             />
-        </VStack>
+        </Flex>
     )
 }
+
+

@@ -20,9 +20,7 @@ function SlippageTolerance(props: { slippage: any; handleChangeSlippage: any; })
 
     const format = (val: number) => `${val} %`;
     const parse = (val: string) => val.replace(/^\%/, '');
-
-    console.log(slippage.auto)
-
+    
     return (
         <SettingWrapper title="Slippage Tolerance" >
             <HStack spacing={2} justifyContent='space-between' >

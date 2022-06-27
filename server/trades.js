@@ -8,7 +8,7 @@ const katanaRouterABI = require('./roninChain/contracts/abi/KatanaRouter.json');
 
 const { sendEvent, writeEvent } = require('./ServerSentEvent');
 
-const web3 = new Web3(new Web3.providers.WebsocketProvider("http://ws.node.atomicswap.online",
+const web3 = new Web3(new Web3.providers.WebsocketProvider(process.env.websocketProvider,
     {
         reconnect: {
             auto: true,

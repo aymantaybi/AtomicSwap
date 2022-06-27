@@ -1,33 +1,24 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateTrades, selectTradingHistory } from './tradingHistorySlice';
-import { fetchTradeHistory } from '@/features/tradingHistory/tradingHistoryApi';
 
 import {
-    useColorMode,
     useColorModeValue,
-    IconButton,
-    IconButtonProps,
 } from "@chakra-ui/react";
 
 import {
-    TableCaption,
     Thead,
     Tr,
     Th,
     Tbody,
     Td,
-    Tfoot,
     Image,
-    HStack,
-    Box,
     Center,
-    Heading,
     TableContainer,
     Table
 } from "@chakra-ui/react";
 
-import { formatHour, sleep } from '@/utils';
+import { formatHour } from '@/utils';
 
 interface Trade {
     amountIn: string,
@@ -55,7 +46,7 @@ function TradeTableRow(props: { trade: Trade; }) {
     var assetOut = trade.path[trade.path.length - 1];
 
     return (
-        <Tr _hover={{ bg: "teal.600" }} onClick={() => { console.log("low") }}>
+        <Tr _hover={{ bg: "teal.600" }} onClick={() => { window.open(`https://explorer.roninchain.com/tx/${trade.transactionHash}`) }}>
             <Td>
                 <Center>
                     {trade.amountIn}
@@ -87,8 +78,6 @@ function TradeTableRow(props: { trade: Trade; }) {
 
 export function TradeHistory() {
 
-    const bgColor = useColorModeValue("white", "#171e2b");
-
     const tradingHistoryState = useSelector(selectTradingHistory);
 
     const dispatch = useDispatch();
@@ -109,28 +98,23 @@ export function TradeHistory() {
     }, []);
 
     return (
-        <Box width={"90%"} height={"80vh"} borderWidth='1px' borderRadius='lg' bgColor={bgColor} margin="1rem" padding="1rem" >
-            <TableContainer maxHeight={"90%"} overflowY={"scroll"} >
-                <Table variant='simple' size={"sm"} >
-                    <TableCaption>TRADE HISTORY</TableCaption>
-                    <Thead position="sticky">
-                        <Tr>
-                            <Th>Amount In</Th>
-                            <Th>Asset In</Th>
-                            <Th>Amount Out</Th>
-                            <Th>Asset Out</Th>
-                            <Th>Time</Th>
-                        </Tr>
-                    </Thead>
-                    <Tbody>
-                        {tradingHistoryState.trades.map(trade => (
-                            <TradeTableRow trade={trade} />
-                        ))}
-                    </Tbody>
-                    <Tfoot>
-                    </Tfoot>
-                </Table>
-            </TableContainer>
-        </Box>
+        <TableContainer bgColor={useColorModeValue("white", "#171e2b")} height="400px" width="100%" overflowY="scroll" borderWidth='1px' borderRadius='lg' padding="1rem">
+            <Table variant='simple' size="sm" >
+                <Thead position="sticky">
+                    <Tr>
+                        <Th>Amount In</Th>
+                        <Th>Asset In</Th>
+                        <Th>Amount Out</Th>
+                        <Th>Asset Out</Th>
+                        <Th>Time</Th>
+                    </Tr>
+                </Thead>
+                <Tbody>
+                    {tradingHistoryState.trades.map(trade => (
+                        <TradeTableRow trade={trade} />
+                    ))}
+                </Tbody>
+            </Table>
+        </TableContainer>
     )
 }

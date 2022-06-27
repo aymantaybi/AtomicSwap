@@ -8,7 +8,7 @@ const { sendEvent, writeEvent } = require('./ServerSentEvent');
 
 const pairABI = require('./roninChain/contracts/abi/Pair.json');
 const pairAddress = "0x306a28279d04a47468ed83d55088d0dcd1369294";
-const web3 = new Web3(new Web3.providers.WebsocketProvider("http://ws.node.atomicswap.online",
+const web3 = new Web3(new Web3.providers.WebsocketProvider(process.env.websocketProvider,
     {
         reconnect: {
             auto: true,
@@ -103,74 +103,13 @@ router.get('/reserves/:pairAddress', async (req, res) => {
     sendEvent(res, data);
 });
 
-router.get('/price', async (req, res) => {
-
-    var pairContract = new web3.eth.Contract(pairABI, pairAddress);
-
-    var blockTime = 3; // seconds
-
-    var timeframe = 7200;
-
-    var candlesNumber = 10;
-
-    var candleBlocks = (timeframe / blockTime) / candlesNumber;
-
-    var block = await web3.eth.getBlock("latest");
-
-    var { number: blockNumber, timestamp: blockTimestamp } = block;
-
-    var pastEvents = await pairContract.getPastEvents('Sync', { fromBlock: blockNumber - (timeframe / blockTime), toBlock: 'latest' });
-
-    var data = {};
-
-    pastEvents.forEach(event => {
-
-        var { blockNumber } = event;
-
-        var reserve0 = new Decimal(event.returnValues.reserve0);
-        var reserve1 = new Decimal(event.returnValues.reserve1);
-
-        var price = reserve1.dividedBy(10 ** 18).dividedBy(reserve0).times(997).dividedBy(1000);
-
-        data[blockNumber] = { price }
-
-    });
-
-    var blockSeries = [];
-
-    for (var i = blockNumber - (timeframe / blockTime); i < blockNumber; i += candleBlocks) {
-
-        blockSeries.push([i, i + candleBlocks])
-
-    }
-
-    var candles = [];
-
-    for (var blockSerie of blockSeries) {
-
-        var openBlock = Object.keys(data).find(blockNumber => Number(blockNumber) >= blockSerie[0]);
-        var closeBlock = Object.keys(data).reverse().find(blockNumber => Number(blockNumber) <= blockSerie[1]);
-
-        candles.push({
-            timestamp: blockTimestamp - ((blockNumber - closeBlock) * blockTime),
-            open: data[openBlock].price,
-            close: data[closeBlock].price,
-        });
-
-    }
-
-    res.json({ data: { candles } });
-});
-
-module.exports = router;
-
 async function syncEventCallback(pairContract) {
 
     var block = await web3.eth.getBlock("latest");
 
     var { number: blockNumber, timestamp: blockTimestamp } = block;
 
-    var pastEvents = await pairContract.getPastEvents('Sync', { fromBlock: blockNumber - 1200, toBlock: 'latest' });
+    var pastEvents = await pairContract.getPastEvents('Sync', { fromBlock: blockNumber - 200, toBlock: 'latest' });
 
     var rawUpdates = pastEvents.map(event => ({
         reserve0: event.returnValues.reserve0,
@@ -180,7 +119,7 @@ async function syncEventCallback(pairContract) {
 
     var updates = [];
 
-    for (var i = rawUpdates[0].time; i < rawUpdates[rawUpdates.length - 1].time; i += 60000) {
+    for (var i = rawUpdates[0].time; i <= rawUpdates[rawUpdates.length - 1].time; i += 60000) {
 
         var periodeUpdates = rawUpdates.filter(update => update.time == i);
 
@@ -195,3 +134,5 @@ async function syncEventCallback(pairContract) {
 
     return updates;
 }
+
+module.exports = router;

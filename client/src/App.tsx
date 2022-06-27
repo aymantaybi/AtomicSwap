@@ -1,48 +1,57 @@
-import * as React from "react"
 import {
   ChakraProvider,
-  Box,
-  Text,
-  Link,
-  VStack,
-  Code,
+  SimpleGrid,
+  Flex,
   Grid,
-  theme,
-  Image,
-  Heading,
-  HStack,
-  SimpleGrid
+  GridItem
 } from "@chakra-ui/react";
 
 import store from '@/app/store';
 import { Provider } from 'react-redux';
 
-import { ColorModeSwitcher } from "./ColorModeSwitcher";
-import { Logo } from "./Logo";
 
 import { TradeHistory } from "@/features/tradingHistory/TradingHistory";
 import { Bar } from './Bar';
 import { TradingChart } from "@/features/tradingChart/TradingChart";
 
-import Chart from "react-apexcharts";
-import { TradingInterface } from "@/features/swapInterface/SwapInterface";
+import { SwapInterface } from "@/features/swapInterface/SwapInterface";
+
+import { Button, ButtonGroup } from '@chakra-ui/react'
+
+import theme from "./theme/index";
+
+import "./App.css";
 
 export function App() {
+
+  console.log(theme);
 
   return (
     <ChakraProvider theme={theme}>
       <Provider store={store}>
-        <Box textAlign="center" fontSize="xl" display="flex" flexDirection="column" justifyContent="center" alignItems="center">
+        <div className="flex-container">
           <Bar />
-          <SimpleGrid columns={[1, null, 2]} spacing={1} w="90vw" h="90vh" alignItems="center" >
-            <TradeHistory />
-            <VStack spacing={2} alignItems="center" justifyContent="center" height={"100%"} >
+          <Grid
+            h="80%"
+            padding={["1rem", "2rem"]}
+            templateRows='repeat(3, 1fr)'
+            templateColumns='repeat(8, 1fr)'
+            gap={1}
+          >
+            <GridItem display={["none", "flex"]} justifyContent="center" alignItems="center" rowSpan={1} colSpan={[8, 8, 5]} padding={[0, "2rem"]} >
               <TradingChart />
-              <TradingInterface />
-            </VStack>
-          </SimpleGrid>
-        </Box>
+            </GridItem>
+            <GridItem rowSpan={[3, 1]} colSpan={[8, 8, 3]} display="flex" justifyContent="center" alignItems="center" >
+              <SwapInterface />
+            </GridItem>
+            <GridItem display={["none", "flex"]} justifyContent="center" alignItems="center" rowSpan={1} colSpan={8} padding={[0, "3rem"]} >
+              <TradeHistory />
+            </GridItem>
+          </Grid>
+          {/*  */}
+        </div>
       </Provider>
-    </ChakraProvider>
+    </ChakraProvider >
+
   )
 }
