@@ -3,7 +3,11 @@ import {
   SimpleGrid,
   Flex,
   Grid,
-  GridItem
+  GridItem,
+  VStack,
+  HStack,
+  Center,
+  StackDivider
 } from "@chakra-ui/react";
 
 import store from '@/app/store';
@@ -21,6 +25,7 @@ import { Button, ButtonGroup } from '@chakra-ui/react'
 import theme from "./theme/index";
 
 import "./App.css";
+import Table, { TableBody, TableCell, TableHead, TableRow } from "./components/Table";
 
 export function App() {
 
@@ -31,7 +36,50 @@ export function App() {
       <Provider store={store}>
         <div className="flex-container">
           <Bar />
-          <Grid
+
+          <Table >
+            <TableHead>
+
+              <TableCell >
+                Token
+              </TableCell>
+
+              <TableCell >
+                Amount
+              </TableCell>
+
+              <TableCell >
+                Time
+              </TableCell>
+
+            </TableHead>
+            <TableBody>
+              <TableRow>
+                <TableCell >
+                  SLP
+                </TableCell>
+                <TableCell >
+                  100
+                </TableCell>
+                <TableCell >
+                  10:45:12
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell >
+                  SLP
+                </TableCell>
+                <TableCell >
+                  100
+                </TableCell>
+                <TableCell >
+                  10:45:12
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+
+          {/* <Grid
             h="80%"
             padding={["1rem", "2rem"]}
             templateRows='repeat(3, 1fr)'
@@ -47,8 +95,8 @@ export function App() {
             <GridItem display={["none", "flex"]} justifyContent="center" alignItems="center" rowSpan={1} colSpan={8} padding={[0, "3rem"]} >
               <TradeHistory />
             </GridItem>
-          </Grid>
-          {/*  */}
+          </Grid> */}
+
         </div>
       </Provider>
     </ChakraProvider >

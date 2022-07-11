@@ -76,19 +76,21 @@ export function Bar() {
 
     return (
         <Flex w="100%" h="80px" display="flex" justifyContent="space-between" alignItems="center" >
-            <HStack h="100%" spacing='15px' marginLeft="2rem" >
-                <AtomIcon color={useColorModeValue("#171e2b", "white")} boxSize="45px" />
-                <Heading size="md" color={useColorModeValue("#171e2b", "white")} fontFamily="PT Sans" fontSize="25px" display={["none", "flex"]} flexDirection="row" >
-                    Atomic
-                    <Heading size="md" fontFamily="PT Sans" fontSize="25px" fontWeight={"90"} >
-                        Swap
+            <HStack spacing='2rem'>
+                <HStack spacing='10px' marginLeft="2rem" >
+                    <AtomIcon color={useColorModeValue("#171e2b", "white")} boxSize="45px" />
+                    <Heading size="md" color={useColorModeValue("#171e2b", "white")} fontFamily="PT Sans" fontSize="25px" display={["none", "flex"]} flexDirection="row" >
+                        Atomic
+                        <Heading size="md" fontFamily="PT Sans" fontSize="25px" fontWeight={"90"} >
+                            Swap
+                        </Heading>
                     </Heading>
-                </Heading>
-                <HStack spacing='5px' marginLeft="30px" >
-                    <Button size="sm" leftIcon={<SwapIcon boxSize="27px" color={useColorModeValue("#319795", "#81E6D9")} />} colorScheme='teal' variant='outline'>
+                </HStack>
+                <HStack spacing='1px' >
+                    <Button size="md" leftIcon={<SwapIcon boxSize="25px" color={useColorModeValue("#319795", "#81E6D9")} />} colorScheme='teal' variant='ghost' background="rgba(129, 230, 217, 0.12)" >
                         Swap
                     </Button>
-                    <Button size="sm" leftIcon={<BridgeIcon boxSize="27px" color={useColorModeValue("#319795", "#81E6D9")} />} colorScheme='teal' variant='outline'>
+                    <Button size="md" leftIcon={<BridgeIcon boxSize="25px" color={useColorModeValue("#319795", "#81E6D9")} />} colorScheme='teal' variant='ghost'>
                         Bridge
                     </Button>
                 </HStack>
