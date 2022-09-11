@@ -37,7 +37,7 @@ export function App() {
         <div className="flex-container">
           <Bar />
 
-          <Table >
+          {/* <Table >
             <TableHead>
 
               <TableCell >
@@ -77,9 +77,9 @@ export function App() {
                 </TableCell>
               </TableRow>
             </TableBody>
-          </Table>
+          </Table> */}
 
-          {/* <Grid
+          <Grid
             h="80%"
             padding={["1rem", "2rem"]}
             templateRows='repeat(3, 1fr)'
@@ -95,7 +95,7 @@ export function App() {
             <GridItem display={["none", "flex"]} justifyContent="center" alignItems="center" rowSpan={1} colSpan={8} padding={[0, "3rem"]} >
               <TradeHistory />
             </GridItem>
-          </Grid> */}
+          </Grid> 
 
         </div>
       </Provider>
